@@ -48,12 +48,8 @@ fun dailyProblem1OnePass(l : Array<Int>, k : Int) : Pair<Int, Int> {
     // such that the pair of numbers add up to sum k
     for(entry in elements) {
         val diff = k - entry.key
-        // using the !! operator which will throw a Null Pointer Exception
-        // if elements[diff] is null
-        // alternative could be to use the elvis operator again
-        // and use -1 as a flag to tell if the value does not exist in the hash map
-        // alternative can be bad because array can have negative values in them
-        if(entry.key == diff && elements[diff]!! > 1) {
+
+        if(entry.key == diff && (elements[diff] ?: 0) > 1) {
             // if a potential pair was found, ensure that the elements map contains at least 2 copies of the same number
             return Pair(entry.key, diff)
         }
