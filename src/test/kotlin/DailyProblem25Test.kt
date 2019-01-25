@@ -96,7 +96,7 @@ class DailyProblem25StackTest : FunSpec({
     }
 
     test("Test case 4: given regular exp '.*at' and string 'chats'") {
-        val regExp = ".*at"
+        val regExp = ".*at"   // .*
         val str = "chats"
         val answer : Boolean = dailyProblem25Stack(str, regExp)
         answer.shouldBeFalse()
@@ -130,10 +130,17 @@ class DailyProblem25StackTest : FunSpec({
         answer.shouldBeFalse()
     }
 
-    test("Test case 9: given regular exp '*' and string ''") {
+    test("Test case 9: given regular exp '*' and string 'abcdefg'") {
         val regExp = "*"
-        val str = ""
+        val str = "abcdefg"
         val answer : Boolean = dailyProblem25Stack(str, regExp)
         answer.shouldBeFalse()
+    }
+
+    test("Test case 10: given regular exp 'cha*.' and string 'chaaaaaaat'") {
+        val regExp = "cha*."
+        val str = "chaaaaaaat"
+        val answer : Boolean = dailyProblem25Stack(str, regExp)
+        answer.shouldBeTrue()
     }
 })

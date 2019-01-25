@@ -73,51 +73,73 @@ fun dailyProblem25(str : String, regExp : String) : Boolean {
 // strategy for this one would be to push each character into its respective stack
 // when an asterisk is pushed onto the stack, pop it off so we can compare the most recent
 // character in str against the previous character in regexp
-// Only Passes 7/9 tests :(
+
+// application of nondeterministic finite automata (RIP something I didn't get cover in my undergrad courses)
+// should do my homework to learn about the Thompson Construction algorithm
+// which is used to convert a regular expression into a Nondeterministic finite automata
+
+// algorithm has no concept of looking ahead to see if string does not end with *
 fun dailyProblem25Stack(str : String, regExp: String) : Boolean {
     var answer = true
     var regExpStack = Stack<Char>()
 
-    var strIndex = 0
     var regExpIndex = 0
+    var strIndex = 0
+    var wasAsteriskEncountered : Boolean = (regExp.isNotEmpty() && regExp[0] == '*')
+    var topChar : Char? = null
+    var prevChar : Char? = null
 
-    var isAsterisk = false
+    if(regExp.isNotEmpty()) {
+        regExpStack.push(regExp[regExpIndex])
+    }
 
-    while(strIndex < str.length && regExpIndex < regExp.length) {
-        if(!isAsterisk)
-            regExpStack.push(regExp[regExpIndex])
-        else {
-            if(str[strIndex] != regExpStack.peek()) {
-                isAsterisk = false
-                regExpStack.push(regExp[regExpIndex])
-            }
-            else
-                --regExpIndex
-        }
+    while(regExpStack.isNotEmpty()) {
 
-        var topChar : Char? = regExpStack.peek()
+        prevChar = if(regExpIndex != 0) topChar else null
+        topChar = regExpStack.pop()
 
         if(topChar == '*') {
-            regExpStack.pop()
-            if(regExpStack.isEmpty()) {
+            wasAsteriskEncountered = true
+        }
+
+        if(wasAsteriskEncountered) {
+            // assumption: zero or more of the preceding character that is nothing will always evaluate to false
+            if(prevChar == null) {
                 answer = false
                 break
-            } else {
-                topChar = regExpStack.peek()
-                isAsterisk = true
+            }
+
+            // if preceding element in the pattern DOES NOT current element in str
+            if(prevChar != '.' && prevChar != str[strIndex]) {
+                wasAsteriskEncountered = false
+            } else { // prevent skipping characters in the regExp pattern string
+                --regExpIndex
             }
         }
 
-        if(topChar != '.' && str[strIndex] != topChar) {
-            answer = false
-            break
+        if(!wasAsteriskEncountered)
+        {
+            // evaluate if regExp character matches current string character
+            if(topChar != '.' && topChar != str[strIndex]) {
+                answer = false
+                break
+            }
         }
 
         ++regExpIndex
         ++strIndex
+
+        if(regExpIndex >= regExp.length || strIndex >= str.length)
+            break
+
+        // push character from regExp
+        if(!wasAsteriskEncountered) {
+            regExpStack.push(regExp[regExpIndex])
+        }
     }
 
-    if(regExp[regExp.length - 1] == '.' && str.length != regExp.length)
+    // last character comparison
+    if(topChar == '.' && regExp.length < str.length)
         answer = false
 
     return answer
