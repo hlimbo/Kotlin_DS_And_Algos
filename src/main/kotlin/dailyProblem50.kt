@@ -1,6 +1,8 @@
 import java.lang.ArithmeticException
 
 class dp50 {
+    // in kotlin, inner keyword allows this class to be accessed from the outer class
+    // Inner classes carry a reference to an object of an outer class
     inner class Node(val num: Int? = null, val operator: Char? = null) {
         var leftNode: Node? = null
         var rightNode: Node? = null
