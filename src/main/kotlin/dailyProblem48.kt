@@ -1,42 +1,52 @@
 import kotlin.math.log
 
-// come back to this tomorrow......
-class Node (val letter: Char) {
-    init {
-        println(letter)
-    }
+// FAILED TO SOLVE :(
 
-    var leftNode: Node? = null
-    var rightNode: Node? = null
-}
 
-class BinaryTree(val root: Node) {
-    init {
-        println("Binary Tree")
-        println(root.letter)
+class dp48 {
+    inner class Node(val letter: Char) {
+        var parent: Node? = null
     }
 }
+// assumption: preOrderList contains an identical set of characters in inOrderList
+// otherwise the problem will become impossible to solve..
+fun dailyProblem48(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>) : dp48.Node {
 
-fun preOrderTree(arr: ArrayList<Char>) : BinaryTree {
-
-    val rootCharacter: Char = arr[0]
-    val tree = BinaryTree(Node(rootCharacter))
-
-    // derived from max number of nodes formula: n = (2^k) - 1
-    // where n = max number of nodes in a full binary tree (full means all leaf nodes share the same level as the depth)
-    // and k = the depth of the tree (depth = max level obtained from a leaf node)
-    val n: Float = arr.size.toFloat()
-    val depth = log(n + 1.0, 2.0)
-
-
-    tree.root.leftNode = Node(arr[1])
-    // tree.root.leftNode.leftNode = Node(arr[2])
-
-
-    // try something iteratively instead....
-    for(i in 1 until arr.size) {
-
+    // base case: Both arrays have size of 1
+    if(preOrderList.size == 1) {
+        val c: Char = preOrderList[0]
+        println("Base Case: Character used: $c")
+        return dp48().Node(c)
     }
 
-    return BinaryTree(Node('R'))
+    preOrderList.removeAt(0)
+    dailyProblem48(preOrderList, inOrderList)
+
+    return dp48().Node('R')
 }
+
+//fun helper(preOrderList: ArrayList<Char>): dp48.Node {
+//    val rootChar: Char = preOrderList.removeAt(0)
+//    val root = dp48().Node(rootChar)
+//    return bottomUp(preOrderList, root)
+//}
+//
+//// modify root by implicitly adding in child nodes to it
+//fun bottomUp(preOrderList: ArrayList<Char>, root: dp48.Node?) {
+//
+//    val dp = dp48()
+//    // base case
+//    if(preOrderList.size == 1) {
+//        val n = dp.Node(preOrderList[0])
+//        n.parent = root
+//        return n
+//    }
+//
+//    val c: Char = preOrderList.removeAt(0)
+//    val node = dp.Node(c)
+//    node.parent = root
+//    bottomUp(preOrderList, node)
+//    bottomUp(preOrderList, node)
+//
+//    return dp48().Node('R')
+//}
