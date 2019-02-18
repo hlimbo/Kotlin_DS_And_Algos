@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 class dp51 {
     // In Kotlin parameter arguments ARE NOT passed by reference
     // Parameter arguments are passed as val variables (read-only)
@@ -26,17 +28,30 @@ class dp51 {
         Club
         Heart
      */
-    inner class Card(val value: Int, val suit: String)
+    inner class Card(val value: Int, val suit: String) {
+        override fun toString(): String {
+            return "Card Value: $value | Card Suit: $suit"
+        }
+    }
 }
 
 // assumption 1: randomNum is a perfectly randomly generated number that is used to make a set of swaps
-fun dailyProblem51(randomNum: Int, deckOfCards: ArrayList<dp51.Card>) : ArrayList<dp51.Card> {
-    val dp = dp51()
+// I got stuck due to the 3 constraints:
+// 1. equally likely permutations
+// 2. randomNum generated from a perfectly random number generator
+// 3. O(n) time complexity
+fun dailyProblem51(deckOfCards: ArrayList<dp51.Card>) : ArrayList<dp51.Card> {
     val shuffledDeck = ArrayList<dp51.Card>(deckOfCards)
 
-    // how does randomNum retrieved from an outside function help me solve this problem?
-    // swapping procedure goes here... think about how to swap the cards such that
-    // the input order != output order
+    // apply fisher-yates algorithm here as well to achieve O(n) time complexity
+    // don't go to first element since selecting a random index from array from 0 to 0 = 0
+    for(i in (shuffledDeck.size - 1) downTo 1) {
+        val j = Random.nextInt(i + 1)
+        // swap
+        val tmp = shuffledDeck[i]
+        shuffledDeck[i] = shuffledDeck[j]
+        shuffledDeck[j] = tmp
+    }
 
     return shuffledDeck
 }
