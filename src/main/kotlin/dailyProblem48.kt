@@ -33,11 +33,7 @@ class dp48 {
 // assumption: preOrderList contains an identical set of characters in inOrderList
 // otherwise the problem will become impossible to solve..
 fun dailyProblem48(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>) : dp48.Node? {
-    // in a preOrder traversal the root node will always be the first element in an array representation
-    val preOrderIndex = 0
-    // in an inOrder traversal, the root node will always be the middle element in an array representation
-    val inOrderIndex = inOrderList.size / 2
-    return buildTree(preOrderList, preOrderIndex, inOrderList, inOrderIndex)
+    return buildTree(preOrderList, inOrderList, 0, inOrderList.size - 1)
 }
 
 // From GeekForGeeks
@@ -47,29 +43,45 @@ fun dailyProblem48(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>) 
     2. Create a new tree node tNode with the data as picked element
     3. Find the picked element's index in Inorder. Let the index be inIndex
     4. Call buildTree for elements before inIndex and make the built tree as right subtree of tNode
-    5. return tNode
+    5. Call buildTree for elements after inIndex and make the build tree as right subtree of tNode
+    6. return tNode
  */
 
-fun buildTree(preOrderList: ArrayList<Char>, preOrderIndex: Int, inOrderList: ArrayList<Char>, inOrderIndex: Int) : dp48.Node? {
+// in a preorder traversal, the root node will always be the first element in the array
+var pIndex = -1 // make this variable static and outside scope of buildTree because we want
+// this variable to NOT have the same value when passing in the second call of buildTree function
+// we want pIndex to update have global context!
+fun buildTree(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>, inStart: Int, inEnd: Int) : dp48.Node? {
     val dp = dp48()
 
-    // base case ~ looks like I may have an incorrect base case
-    if(preOrderIndex == preOrderList.size || preOrderIndex < 0)
+    // base case
+    if(inStart > inEnd || pIndex >= preOrderList.size)
         return null
 
     // 1
-    var pIndex = preOrderIndex
-    pIndex++
+    pIndex += 1
+
+    println("pIndex: $pIndex")
+
+    // base case
+    if(pIndex >= preOrderList.size)
+        return null
 
     // 2
-    val node = dp.Node(preOrderList[preOrderIndex])
+    val node = dp.Node(preOrderList[pIndex])
 
+    // the other hidden base case one can forget about ~ how to identify if the current element in the array is a leaf node..
+    if(inStart == inEnd)
+        return node
 
-    // 4
-    node.leftNode = buildTree(preOrderList, pIndex, inOrderList, (inOrderIndex / 2) - 1)
+    // 3 inOrder traversal, it is known that the middle element of the array is the root of the tree
+    val middleIndex: Int = (inEnd + 1 - inStart) / 2
 
-    // 5
-    node.rightNode = buildTree(preOrderList, (inOrderIndex / 2) - 1, inOrderList, pIndex)
+    // 4 left half of inOrder array
+    node.leftNode = buildTree(preOrderList, inOrderList, inStart, middleIndex - 1)
+
+    // 5 right half of inOrder array
+    node.rightNode = buildTree(preOrderList, inOrderList, middleIndex + 1, inEnd)
 
     // 6
     return node

@@ -31,16 +31,17 @@ class DailyProblem48Test : FunSpec({
         // to verify print out tree node in preOrder and inOrder orders and see if they are equal
         // to the original inputs order
 
-//        val height = dp48().height(treeNode)
-//        println("height: $height") // expecting a height of 2 but got 7...
-//        println("preOrder traversal")
-//        preOrder(treeNode)
-//        println()
-//        println("inOrder traversal")
-//        inOrder(treeNode)
+        val height = dp48().height(treeNode)
+        println("height: $height") // expecting a height of 2 but got 7...
+        println("preOrder traversal")
+        preOrder(treeNode)
+        println()
+        println("inOrder traversal")
+        inOrder(treeNode)
     }
 
     test("Simple Second Test Case") {
+        pIndex = -1
         val preOrderList: ArrayList<Char> = arrayListOf('a', 'b', 'd')
         val inOrderList: ArrayList<Char> = arrayListOf('b', 'a', 'd')
 
@@ -54,6 +55,7 @@ class DailyProblem48Test : FunSpec({
     }
 
     test("Simpler Third Test Case") {
+        pIndex = -1
         val preOrderList: ArrayList<Char> = arrayListOf('a', 'b')
         val inOrderList: ArrayList<Char> = arrayListOf('b', 'a')
 
@@ -66,5 +68,6 @@ class DailyProblem48Test : FunSpec({
         preOrder(treeNode)
         println("inOrder:")
         inOrder(treeNode)
+
     }
 })
