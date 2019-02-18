@@ -75,7 +75,14 @@ fun buildTree(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>, inSta
         return node
 
     // 3 inOrder traversal, it is known that the middle element of the array is the root of the tree
-    val middleIndex: Int = (inEnd + 1 - inStart) / 2
+    // val middleIndex: Int = (inEnd + 1 - inStart) / 2 // this is the middle index in a recursive element.. for all subtrees excluding root
+    var middleIndex = -1
+    for(m in 0 until inOrderList.size) {
+        if(preOrderList[pIndex] == inOrderList[m]) {
+            middleIndex = m
+            break
+        }
+    }
 
     // 4 left half of inOrder array
     node.leftNode = buildTree(preOrderList, inOrderList, inStart, middleIndex - 1)
