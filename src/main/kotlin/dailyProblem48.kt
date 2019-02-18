@@ -8,6 +8,27 @@ class dp48 {
         var leftNode: Node? = null
         var rightNode: Node? = null
     }
+
+    fun height(node: Node?) : Int {
+        // base case
+        if(node == null)
+            return 0
+
+        val leftTreeDepth = 1 + height(node.leftNode)
+        val rightTreeDepth = 1 + height(node.rightNode)
+
+        return Math.max(leftTreeDepth, rightTreeDepth)
+    }
+
+    fun nodeCount(node: Node?) : Int {
+        if(node == null)
+            return 0
+
+        val leftCount = 1 + nodeCount(node.leftNode)
+        val rightCount = 1 + nodeCount(node.rightNode)
+
+        return leftCount + rightCount
+    }
 }
 // assumption: preOrderList contains an identical set of characters in inOrderList
 // otherwise the problem will become impossible to solve..
@@ -32,8 +53,8 @@ fun dailyProblem48(preOrderList: ArrayList<Char>, inOrderList: ArrayList<Char>) 
 fun buildTree(preOrderList: ArrayList<Char>, preOrderIndex: Int, inOrderList: ArrayList<Char>, inOrderIndex: Int) : dp48.Node? {
     val dp = dp48()
 
-    // base case ~ return ! character to indicate end of preOrderList has been reached
-    if(preOrderIndex == preOrderList.size)
+    // base case ~ looks like I may have an incorrect base case
+    if(preOrderIndex == preOrderList.size || preOrderIndex < 0)
         return null
 
     // 1
@@ -43,20 +64,12 @@ fun buildTree(preOrderList: ArrayList<Char>, preOrderIndex: Int, inOrderList: Ar
     // 2
     val node = dp.Node(preOrderList[preOrderIndex])
 
-    // 3
-    var iIndex = -1
-    for(i in 0 until inOrderList.size) {
-        if(inOrderList[i] == preOrderList[preOrderIndex]) {
-            iIndex = i
-            break
-        }
-    }
 
     // 4
-    node.leftNode = buildTree(preOrderList, pIndex, inOrderList, iIndex - 1)
+    node.leftNode = buildTree(preOrderList, pIndex, inOrderList, (inOrderIndex / 2) - 1)
 
     // 5
-    node.rightNode = buildTree(preOrderList, pIndex, inOrderList, iIndex + 1)
+    node.rightNode = buildTree(preOrderList, (inOrderIndex / 2) - 1, inOrderList, pIndex)
 
     // 6
     return node
