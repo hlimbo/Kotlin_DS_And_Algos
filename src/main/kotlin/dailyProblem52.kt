@@ -1,3 +1,5 @@
+import java.util.*
+
 // LRU cache
 class dailyProblem52 {
     inner class Item(val value: Int, var usedScore: Int = 0) {
@@ -12,14 +14,13 @@ class dailyProblem52 {
     // then the likelihood of O(n) time complexity is greater on set method
     inner class LRU(val n: Int, var size: Int = 0) {
         private val hashMap = HashMap<Int, Item>()
+
+        private val pq = PriorityQueue<Pair<Int, Item?>>(kotlin.Comparator { o1, o2 ->  o1.second!!.usedScore - o2.second!!.usedScore })
         var mostUsedScore = 0
 
         fun set(key: Int, value: Item) {
             val previousMapping: Item? = hashMap.put(key, value)
-            // increase the size by 1 if a brand new item in the cache is being added in
-            if(previousMapping == null) {
-                ++size
-            }
+
             // assumption: an item being set affects the relative usage score
             // give this item the highest score possible
             if(hashMap[key] != null) {
@@ -27,25 +28,38 @@ class dailyProblem52 {
                 hashMap[key]?.usedScore = mostUsedScore
             }
 
+            // increase the size by 1 if a brand new item in the cache is being added in
+            if(previousMapping == null) {
+                ++size
+                pq.offer(Pair(key, hashMap[key]))
+            } else {
+                // replacing item value in queue....
+                pq.remove()
+                pq.offer(Pair(key, hashMap[key]))
+            }
 
-            // remove least recently used item (item that hasn't been retrieved using get method)
+            // remove least recently used item
             if(size > n) {
                 --size
-                // remove least recently used item in O(1) time.......
+
+                // remove least recently used item in O(1) time implementation
+                val leastRecentlyUsed: Pair<Int,Item?> = pq.peek()
+                pq.remove()
+                hashMap.remove(leastRecentlyUsed.first)
 
                 // O(n) implementation
-                var leastUsed: Item? = hashMap[key]
-                var leastUsedIndex = -1
-                for(k in hashMap.keys) {
-                    if(leastUsed!!.usedScore > hashMap[k]!!.usedScore) {
-                        leastUsed = hashMap[k]
-                        leastUsedIndex = k
-                    }
-                }
-
-                if(leastUsedIndex != -1) {
-                    hashMap.remove(leastUsedIndex)
-                }
+//                var leastUsed: Item? = hashMap[key]
+//                var leastUsedIndex = -1
+//                for(k in hashMap.keys) {
+//                    if(leastUsed!!.usedScore > hashMap[k]!!.usedScore) {
+//                        leastUsed = hashMap[k]
+//                        leastUsedIndex = k
+//                    }
+//                }
+//
+//                if(leastUsedIndex != -1) {
+//                    hashMap.remove(leastUsedIndex)
+//                }
             }
         }
 
