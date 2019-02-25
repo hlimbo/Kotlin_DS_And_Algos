@@ -1,46 +1,58 @@
 class DailyProblem56 {
-    // I assumed that all nodes have to be connected to every other node
-    // but that shouldn't always be the case for a undirected graph
+    inner class Vertex(val label: Int, var connectionCount: Int, val possibleColorChoices: Int) {
+        val verticesRef = ArrayList<Vertex>()
+        // from 0 to possibleColorChoices - 1
+        val colorChoices = Array<Int>(possibleColorChoices) { it }
+    }
+
+
     inner class UndirectedGraph(val nodeTotal: Int){
         val adjacencyMatrix = Array(nodeTotal) { IntArray(nodeTotal) }
+        val vertices = ArrayList<Vertex>()
 
-        // 0 means not connected
-        // 1 means connected
-        fun copy(matrix: Array<IntArray>) {
+        private val connected = 1
+        private val notConnected = 0
+
+        fun construct(matrix: Array<IntArray>,k: Int) {
             for(r in 0 until nodeTotal) {
                 for(c in 0 until nodeTotal) {
                     adjacencyMatrix[r][c] = matrix[r][c]
                 }
             }
+
+            for(i in 0 until nodeTotal) {
+                vertices.add(Vertex(i, 0, k))
+            }
+
+            // get connections count
+            for(r in 0 until nodeTotal) {
+                for(c in 0 until nodeTotal) {
+                    when(adjacencyMatrix[r][c]) {
+                        connected -> {
+                            vertices[r].connectionCount += 1
+                            vertices[r].verticesRef.add(vertices[c])
+                        }
+                    }
+                }
+            }
+        }
+
+        fun constructVerticesData() {
+
+            // get connection counts
+            for(r in 0 until nodeTotal) {
+                for(c in 0 until nodeTotal) {
+
+                }
+            }
+
+            for(i in 0 until nodeTotal) {
+            }
         }
 
         // assuming not all nodes have to be connected with every other node
-        fun canVerticesBeColored2(k: Int) : Boolean {
+        fun canVerticesBeColored(k: Int) : Boolean {
             return false
-        }
-
-//        fun edgeCountTotal(nodeTotal: Int) : Int {
-//            if(nodeTotal == 0)
-//                return 0
-//
-//            var edgeCount = 0
-//            for(i in 1..nodeTotal) {
-//                edgeCount += (i - 1)
-//            }
-//
-//            return edgeCount
-//        }
-
-        // would be correct if all nodes are connected to every other node
-
-        // vertices can be colored only when no 2 adjacent vertices share
-        // the same color using at most k colors
-        fun canVerticesBeColored(c: Int) : Boolean {
-            if(c < nodeTotal) {
-                return false
-            }
-            // if c >= nodeTotal
-            return true
         }
     }
 }
