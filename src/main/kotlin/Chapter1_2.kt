@@ -6,7 +6,7 @@ import kotlin.math.min
 class Chapter1_2 {
     // returns smallest window that requires sorting where
     // first value in pair is the starting index
-    // second value in pair is the ending index exclusive
+    // second value in pair is the ending index exclusive ~ should HAVE been inclusive
     // Assumption: we want to only sort in ascending order
     fun locateSmallestSortingWindow(list: ArrayList<Int>) : Pair<Int, Int> {
         var startingIndex = 0
