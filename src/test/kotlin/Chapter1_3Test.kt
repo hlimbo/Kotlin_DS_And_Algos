@@ -20,4 +20,18 @@ class Chapter1_3Test : FunSpec({
         val expectedAnswer = (42 + 14 - 5 + 86)
         actualAnswer.shouldBe(expectedAnswer)
     }
+
+    test("Using Kadane's Algorithm with Wrap Around Test") {
+        val arr = arrayListOf(8, -1, 3, 4)
+        val actualAnswer = dp.kadanesAlgoWithWrapAround(arr)
+        val expectedAnswer = (3 + 4 + 8)
+        actualAnswer.shouldBe(expectedAnswer)
+    }
+
+    test("Using Kadane's Algorithm with Wrap Around Test2") {
+        val arr = arrayListOf(8, -1, 3, 4)
+        val actualAnswer = dp.kadanesAlgoWithWrapAround2(arr)
+        val expectedAnswer = (3 + 4 + 8)
+        actualAnswer.shouldBe(expectedAnswer)
+    }
 })
