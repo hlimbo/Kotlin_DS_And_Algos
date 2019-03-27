@@ -15,4 +15,12 @@ class Chapter2_1Test : FunSpec({
         startIndices.shouldBe(expectedIndices)
     }
 
+    test("Second Test Case") {
+        val word = "ab"
+        val s = "abxaba"
+        val startIndices: ArrayList<Int> = dp.findAnagramIndices3(word, s)
+        val expectedIndices = arrayListOf(0, 3, 4)
+        startIndices.shouldBe(expectedIndices)
+    }
+
 })
