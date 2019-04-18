@@ -16,4 +16,12 @@ class Chapter4_4Test : FunSpec({
         }
     }
 
+    test("Second Test Case") {
+        val hints = arrayListOf<String>("None", "+", "-", "-", "-")
+        val answer = dp.reconstructArrayCorrect(hints)
+        for(a in answer) {
+            println("$a")
+        }
+    }
+
 })
